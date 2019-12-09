@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-  console.log('DOM loaded.');
   let worksheet = new window.doenet.Worksheet();
 
   window.worksheet = worksheet;
@@ -7,13 +6,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
   worksheet.addEventListener( 'progress', function(e, progress) {
     console.log("new progress", progress);
   });
-  
-  document.getElementById("progress").addEventListener("click", function() {
-    const p = Math.random();
-    console.log("setting progress to",p);
-    worksheet.progress = p;
-  });
 
+  console.log( document.getElementById("increase") );
+  
+  document.getElementById("increase").addEventListener("click", function() {
+    let p = 0;
+    if (worksheet.progress > 0.0)
+      p = worksheet.progress;
+
+    worksheet.progress = (1 + p)/2.0;
+  });
+  
   let checkbox = document.getElementById("checkbox");
   checkbox.addEventListener("input", function() {
     worksheet.state.checked = checkbox.checked;
@@ -31,16 +34,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
       story.value = state.story;
 
     checkbox.checked = state.checked;
-  });
-  
-  document.getElementById("statement").addEventListener("click", function() {
-    let stmt = new window.doenet.xAPI.Statement(
-      window.doenet.xAPI.actor.me, 
-      window.doenet.xAPI.verb.checkedIn,
-      worksheet
-    );
-
-    worksheet.recordStatement( stmt );
   });
 
 });
