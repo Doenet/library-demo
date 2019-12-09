@@ -8,7 +8,7 @@
   </head>
   <body>
     <h1>Doenet library demo</h1>
-    <textarea id="story" rows="4" cols="50"></textarea>
+    <textarea id="textbox" rows="4" cols="50"></textarea>
 
     <input type="checkbox" id="checkbox" name="checkbox"/>
 
@@ -23,6 +23,51 @@
   &lt;link rel="stylesheet" href="https://unpkg.com/@doenet/beta/dist/main.css"&gt;
 </pre>
 in order to load the Doenet library.</p>
-  </body>
+    
+    <p>
+      When the <code>DOMContentLoaded</code> event is fired, we run
+<pre>
+  let worksheet = new window.doenet.Worksheet();
+</pre>
+to load the Doenet services.  This triggers the GDPR consent form.</p>
 
+  <h2>What happens when I click the button?</h2>
+  <p>The handler for the <code>click</code> event on the button is:
+<pre>
+let p = 0;
+if (worksheet.progress > 0.0)
+  p = worksheet.progress;
+
+worksheet.progress = (1 + p)/2.0;
+</pre>
+Setting <code>worksheet.progress</code> updates the green bar in the corner, and also sends these updates to the gradebook.
+  </p>
+  
+  <h2>What happens when I type in the box or tick the checkbox?</h2>
+    <p>
+      When the checkbox state changes, we make the corresponding change to the <code>worksheet.state</code>, which synchronizes with the server.
+<pre>      
+let checkbox = document.getElementById("checkbox");
+checkbox.addEventListener("input", function() {
+  worksheet.state.checked = checkbox.checked;
+});  
+</pre>
+Similarly when the <code>&lt;textarea&gt;</code> changes, we make the corresponding change to the <code>worksheet.state</code>.  We do this in an ugly way just to demonstrate that you can also completely replace the <code>worksheet.state</code> and it will still sync with the server.
+<pre>
+let textbox = document.getElementById("textbox");
+textbox.addEventListener("input", function() {
+  console.log(textbox.value);
+  worksheet.state = { textbox: textbox.value, checked: checkbox.checked };
+});
+</pre>
+Finally, whenever the state changes on the server side, we make the corresponding change to the page.
+<pre>
+worksheet.addEventListener( 'state', function(event, state) {
+  if (state.textbox)
+    textbox.value = state.textbox;
+  checkbox.checked = state.checked;
+});
+<pre>
+    </p>
+  </body>
 </html>

@@ -22,16 +22,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
     worksheet.state.checked = checkbox.checked;
   });  
 
-  let story = document.getElementById("story");
-  story.addEventListener("input", function() {
-    console.log(story.value);
-    worksheet.state = { story: story.value, checked: checkbox.checked };
+  let textbox = document.getElementById("textbox");
+  textbox.addEventListener("input", function() {
+    console.log(textbox.value);
+    worksheet.state = { textbox: textbox.value, checked: checkbox.checked };
   });
 
-  worksheet.addEventListener( 'state', function(e, state) {
-    console.log("Copying server state to page state...");
-    if (state.story)
-      story.value = state.story;
+  worksheet.addEventListener( 'state', function(event, state) {
+    if (state.textbox)
+      textbox.value = state.textbox;
 
     checkbox.checked = state.checked;
   });
