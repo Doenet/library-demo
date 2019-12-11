@@ -35,16 +35,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
       var n = globalState.players.indexOf( worksheet.userId );
 
       // Disable the input boxes depending on who the player is
-      player1.disabled = true;
-      player2.disabled = true;      
-      
-      if (n == 0) {
-        player1.disabled = false;
-      }
-
-      if (n == 1) {
-        player2.disabled = false;
-      }      
+      player1.disabled = (n !== 0);
+      player2.disabled = (n !== 1);
     }
   }
 
@@ -57,13 +49,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
   // Edit the Player 1 box
   player1.addEventListener("input", function() {
     worksheet.globalState.player1 = player1.value;
-    update(worksheet.globalState);    
+    update(worksheet.globalState);
   });
 
   // Edit the Player 2 box
   player2.addEventListener("input", function() {
     worksheet.globalState.player2 = player2.value;
-    update(worksheet.globalState);        
+    update(worksheet.globalState);
   });    
 
   worksheet.addEventListener( 'globalState', function(e, state) {
